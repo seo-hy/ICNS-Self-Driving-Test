@@ -58,7 +58,7 @@ uint8_t rx3_data = 0;
 
 uint8_t tmp_stop = 1;
 uint8_t tmp_speed1 = 2;
-
+uint8_t tmp_speed2 = 3;
 int MOTOR_PWM[5];
 int MOTOR_PWM_MEAN[5];
 int MOTOR_PWM_MAX[5];
@@ -193,7 +193,7 @@ int main(void)
   while (1)
   {
 
-	  TIM3->CCR3=430; // 1 top
+	  TIM3->CCR3=360; // 1 top
 	  TIM12->CCR1=150;//2
 	  TIM12->CCR2=200; // 3
 	  TIM3->CCR2= 400; //4
@@ -207,12 +207,24 @@ int main(void)
 		  HAL_UART_Transmit(&huart2, &tmp_speed1, 1, 100);
 	  }
 	  else if(rx3_data == 3){
-		  TIM3->CCR1 = 600; // 1
+	  		  HAL_UART_Transmit(&huart2, &tmp_speed2, 1, 100);
+	  	  }
+	  else if(rx3_data == 4){
+		TIM12->CCR1=250; // 2
+		HAL_Delay(2000);
+
+		TIM3->CCR3=360; // 1 top
+		TIM12->CCR2=200; // 3
+		TIM3->CCR2= 400; //4
+		TIM3->CCR1 = 500; // 5
+	  }
+	  if(distance_flag){
+		  TIM3->CCR3=450;
 		  HAL_Delay(1000);
 	  }
 
+	  distance_flag = false;
 	  rx3_data = 0;
-
 
 
     /* USER CODE END WHILE */

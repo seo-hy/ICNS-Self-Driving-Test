@@ -48,9 +48,6 @@
 
 /* USER CODE BEGIN PV */
 uint8_t rx2_data = 0;
-uint16_t speed = 6000;
-uint16_t speed_LR = 9000;
-uint16_t speed_turn = 4000;
 
 uint32_t desired_speed = 3000;
 uint32_t MOTER_PWM[4] = {0};
@@ -264,28 +261,54 @@ int main(void)
   while (1)
   {
 
-	TIM1->CCR1 = 2000;	//LF
-	TIM1->CCR2 = 2000;	//RF
-	TIM1->CCR3 = 2000;	// LB
-
-	//reverse
-	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_10, RESET);
-	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_11, SET);
-	TIM1->CCR4 = 2000;	// RB
+	TIM1->CCR1 = 0;	//LF
+	TIM1->CCR2 = 0;	//RF
+	TIM1->CCR3 = 0;	// LB
+	TIM1->CCR4 = 0;	// RB
 
 	if(rx2_data == 1){
 		TIM1->CCR1 = 0;
 		TIM1->CCR2 = 0;
 		TIM1->CCR3 = 0;
 		TIM1->CCR4 = 0;
-		HAL_Delay(100);
+
+		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, SET);
+		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, RESET);
+
+		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, SET);
+		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_15, RESET);
+
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_8, SET);
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_9, RESET);
+
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_10, SET);
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_11, RESET);
+
 	}else if(rx2_data == 2){
-		 TIM1->CCR1 = 8000;
-		 TIM1->CCR2 = 8000;
-		 TIM1->CCR3 = 8000;
-		 TIM1->CCR4 = 8000;
-		 HAL_Delay(100);
+		TIM1->CCR1 = 8000;
+		TIM1->CCR2 = 8000;
+		TIM1->CCR3 = 8000;
+		TIM1->CCR4 = 8000;
+	}else if(rx2_data == 3){
+		//reverse
+		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, RESET);
+		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, SET);
+
+		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, RESET);
+		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_15, SET);
+
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_8, RESET);
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_9, SET);
+
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_10, RESET);
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_11, SET);
+		TIM1->CCR1 = 8000;
+		TIM1->CCR2 = 8000;
+		TIM1->CCR3 = 8000;
+		TIM1->CCR4 = 8000;
+		HAL_Delay(1000);
 	}
+	// rx2_data = 0;
 
 
 
